@@ -10,6 +10,7 @@ refresh_rate: 30 seconds
 appenders:
   stdout:
     kind: console
+  
   sentry:
     kind: sentry
     encoder:
@@ -45,7 +46,7 @@ fn main() {
 
 ## Testing
 
-The functionality can be tested with  `examples/yaml_config.rs` and `example/code_config.rs` examples.  Just update the Sentry DSN value and run it with:
+The functionality can be tested with  `examples/yaml_config.rs` and `example/code_config.rs` examples, just update the `dsn` value and run it with:
 
 ```shell script
     cargo run --example code_config
