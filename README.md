@@ -25,10 +25,11 @@ root:
 
 ```
 
-lib.rs:
+main.rs:
 ```rust
-use log::{error, info, warn};
-use log4rs;
+use log::{error, info};
+use log4rs::{self, config::Deserializers};
+use sentry_log4rs::SentryAppenderDeserializer;
 
 fn main() {
     let mut deserializers = Deserializers::new();
@@ -42,6 +43,14 @@ fn main() {
 }
 ```
 
+## Testing
+
+The functionality can be tested with  `examples/yaml_config.rs` and `example/code_config.rs` examples.  Just update the Sentry DSN value and run it with:
+
+```shell script
+    cargo run --example code_config
+    cargo run --example yaml_config
+```
 ## License
 
 Licensed under either of
