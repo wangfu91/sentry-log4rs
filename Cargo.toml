@@ -2,9 +2,12 @@
 name = "sentry-log4rs"
 version = "0.1.0"
 authors = ["Fu Wang <wangfu91@hotmail.com>"]
+description = "log4s integration for Sentry."
+repository = "https://github.com/wangfu91/sentry-log4rs"
+readme = "README.md"
+keywords = ["log", "log4rs", "sentry", "error-reporting"]
+license = "MIT/Apache-2.0"
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 log = "0.4.14"
