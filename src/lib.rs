@@ -37,7 +37,7 @@ impl SentryAppender {
     pub fn builder() -> SentryAppenderBuilder {
         SentryAppenderBuilder {
             encoder: None,
-            dsn: "".to_string(),
+            dsn: String::default(),
             threshold: None,
         }
     }
@@ -100,8 +100,13 @@ impl SentryAppenderBuilder {
         self
     }
 
-    pub fn dsn(mut self, dsn: String) -> SentryAppenderBuilder {
-        self.dsn = dsn;
+    pub fn dsn(mut self, dsn: &str) -> SentryAppenderBuilder {
+        self.dsn = dsn.to_string();
+        self
+    }
+
+    fn dsn_string(mut self, dsn: String) -> SentryAppenderBuilder {
+        self.dsn = dsn.to_string();
         self
     }
 
@@ -158,7 +163,7 @@ impl Deserialize for SentryAppenderDeserializer {
             appender = appender.encoder(deserializers.deserialize(&encoder.kind, encoder.config)?);
         }
 
-        appender = appender.dsn(config.dsn);
+        appender = appender.dsn_string(config.dsn);
 
         appender = appender.threshold(config.threshold);
 

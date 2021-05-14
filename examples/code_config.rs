@@ -13,7 +13,7 @@ use log::{error, info};
 fn main() {
     let stdout = ConsoleAppender::builder().build();
     let sentry = SentryAppender::builder()
-        .dsn("https://key@sentry.io/42".to_string())
+        .dsn("https://key@sentry.io/42")
         .threshold(LevelFilter::Error)
         .encoder(Box::new(PatternEncoder::new("{m}")))
         .build();
