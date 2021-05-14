@@ -2,8 +2,8 @@ extern crate log;
 extern crate log4rs;
 extern crate sentry;
 
-use derivative::Derivative;
 use anyhow;
+use derivative::Derivative;
 use log::{Level, LevelFilter, Record};
 use log4rs::{
     append::Append,
@@ -38,7 +38,7 @@ impl SentryAppender {
         SentryAppenderBuilder {
             encoder: None,
             dsn: "".to_string(),
-            threshold: LevelFilter::Error,
+            threshold: None,
         }
     }
 }
@@ -91,7 +91,7 @@ impl Append for SentryAppender {
 pub struct SentryAppenderBuilder {
     encoder: Option<Box<dyn Encode>>,
     dsn: String,
-    threshold: LevelFilter,
+    threshold: Option<LevelFilter>,
 }
 
 impl SentryAppenderBuilder {
@@ -106,7 +106,7 @@ impl SentryAppenderBuilder {
     }
 
     pub fn threshold(mut self, threshold: LevelFilter) -> SentryAppenderBuilder {
-        self.threshold = threshold;
+        self.threshold = Some(threshold);
         self
     }
 
@@ -116,8 +116,8 @@ impl SentryAppenderBuilder {
             _sentry,
             encoder: self
                 .encoder
-                .unwrap_or_else(|| Box::new(PatternEncoder::default())),
-            threshold: self.threshold,
+                .unwrap_or_else(|| Box::new(PatternEncoder::new("{m}"))),
+            threshold: self.threshold.unwrap_or_else(|| LevelFilter::Error),
         }
     }
 }
