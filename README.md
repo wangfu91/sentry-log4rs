@@ -1,5 +1,7 @@
 # log4s integration for Sentry
 
+[![Crates.io version](https://img.shields.io/crates/v/sentry-log4rs.svg)](https://crates.io/crates/sentry-log4rs)[![Documentation](https://docs.rs/sentry-log4rs/badge.svg)](https://docs.rs/sentry-log4rs/)
+
 This crate provides support for integrating sentry with log4rs.
 
 ## Quick Start
@@ -54,14 +56,5 @@ The functionality can be tested with  `examples/yaml_config.rs` and `example/cod
 ```
 ## License
 
-Licensed under either of
  * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
  * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
-
-at your option.
-
-### Contribution
-
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you shall be dual licensed as above, without any
-additional terms or conditions.
