@@ -1,6 +1,6 @@
 # log4s integration for Sentry
 
-[![Crates.io version](https://img.shields.io/crates/v/sentry-log4rs.svg)](https://crates.io/crates/sentry-log4rs)[![Documentation](https://docs.rs/sentry-log4rs/badge.svg)](https://docs.rs/sentry-log4rs/)
+[![Crates.io version](https://img.shields.io/crates/v/sentry-log4rs.svg)](https://crates.io/crates/sentry-log4rs) [![Documentation](https://docs.rs/sentry-log4rs/badge.svg)](https://docs.rs/sentry-log4rs/)
 
 This crate provides support for integrating sentry with log4rs.
 
