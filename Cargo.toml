@@ -3,6 +3,7 @@ name = "sentry-log4rs"
 version = "0.1.0"
 authors = ["Fu Wang <wangfu91@hotmail.com>"]
 description = "log4s integration for Sentry."
+homepage = "https://github.com/wangfu91/sentry-log4rs"
 repository = "https://github.com/wangfu91/sentry-log4rs"
 readme = "README.md"
 keywords = ["log", "log4rs", "sentry", "error-reporting"]
