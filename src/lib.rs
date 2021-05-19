@@ -1,3 +1,66 @@
+//! **sentry-log4rs** is a simple add-on for the **log4rs** logging framework to simplify
+//! integration with the **Sentry** application monitoring system.
+//!
+//! Example usage
+//! =============
+//!
+//! ```no_run
+//! use log::error;
+//! use log4rs;
+//! use sentry_log4rs::SentryAppender;
+//!
+//! fn main() {
+//!     log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
+//!     error!("Something went wrong!");
+//! }
+//! ```
+//!
+//! `log4rs.yaml` file:
+//! ```yaml
+//! appenders:
+//!   sentry:
+//!     kind: sentry
+//!     encoder:
+//!       pattern: "{m}"
+//!     dsn: "YOUR_SENTRY_DSN_HERE"
+//!     threshold: error
+//!
+//! root:
+//!   appenders:
+//!     - sentry
+//! ```
+//!
+//! You can also constructing the configuration programmatically without using a config file:
+//!
+//! ```no_run
+//! use log::{LevelFilter, error};
+//! use log4rs::{
+//!     config::{Appender, Config, Root},
+//!     encode::pattern::PatternEncoder,
+//! };
+//! use sentry_log4rs::SentryAppender;
+//!
+//! fn main() {
+//!     let sentry = SentryAppender::builder()
+//!         .dsn("YOUR_SENTRY_DSN_HERE")
+//!         .threshold(LevelFilter::Error)
+//!         .encoder(Box::new(PatternEncoder::new("{m}")))
+//!         .build();
+//!
+//!     let config = Config::builder()
+//!         .appender(Appender::builder().build("sentry", Box::new(sentry)))
+//!         .build(
+//!             Root::builder()
+//!                 .appender("sentry")
+//!                 .build(LevelFilter::Info),
+//!         )
+//!         .unwrap();
+//!
+//!     log4rs::init_config(config).unwrap();
+//!
+//!     error!("Something went wrong!");
+//! }
+//! ```
 extern crate log;
 extern crate log4rs;
 extern crate sentry;
@@ -16,6 +79,7 @@ use sentry::{
     Level as SentryLevel,
 };
 
+/// Configuration for the sentry appender.
 #[derive(Clone, Eq, PartialEq, Hash, Debug, serde::Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SentryAppenderConfig {
@@ -24,6 +88,7 @@ pub struct SentryAppenderConfig {
     threshold: LevelFilter,
 }
 
+/// An appender which send log message to sentry.
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct SentryAppender {
@@ -34,12 +99,23 @@ pub struct SentryAppender {
 }
 
 impl SentryAppender {
+    /// Creates a new `SentryAppender` builder.
     pub fn builder() -> SentryAppenderBuilder {
         SentryAppenderBuilder {
             encoder: None,
             dsn: String::default(),
             threshold: None,
         }
+    }
+
+    /// Creates a `Deserializers` with sentry appender mapping and the default log4rs mappings.
+    ///  * Appenders
+    ///     * "sentry" -> `SentryAppenderDeserializer`
+    ///  * log4rs default mappings.
+    pub fn deserializers() -> Deserializers {
+        let mut deserializers = Deserializers::new();
+        deserializers.insert("sentry", SentryAppenderDeserializer);
+        deserializers
     }
 }
 
@@ -87,7 +163,7 @@ impl Append for SentryAppender {
     fn flush(&self) {}
 }
 
-// A builder for `SentryAppender`s.
+/// A builder for `SentryAppender`s.
 pub struct SentryAppenderBuilder {
     encoder: Option<Box<dyn Encode>>,
     dsn: String,
