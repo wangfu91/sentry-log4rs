@@ -1,6 +1,6 @@
 [package]
 name = "sentry-log4rs"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Fu Wang <wangfu91@hotmail.com>"]
 description = "log4s integration for Sentry."
 homepage = "https://github.com/wangfu91/sentry-log4rs"
