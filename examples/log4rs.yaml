@@ -5,7 +5,7 @@ appenders:
   # An appender named "stdout" that writes to stdout
   stdout:
     kind: console
-  sentry:
+  sentry_demo:
     kind: sentry
     encoder:
       pattern: "{m}"
@@ -17,4 +17,4 @@ root:
   level: info
   appenders:
     - stdout
-    - sentry
+    - sentry_demo

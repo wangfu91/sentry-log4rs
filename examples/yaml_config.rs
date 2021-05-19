@@ -1,13 +1,11 @@
 use std::{thread, time::Duration};
 
 use log::{error, info};
-use log4rs::{self, config::Deserializers};
-use sentry_log4rs::SentryAppenderDeserializer;
+use log4rs;
+use sentry_log4rs::SentryAppender;
 
 fn main() {
-    let mut deserializers = Deserializers::new();
-    deserializers.insert("sentry", SentryAppenderDeserializer);
-    log4rs::init_file("./examples/log4rs.yaml", deserializers).unwrap();
+    log4rs::init_file("./examples/log4rs.yaml", SentryAppender::deserializers()).unwrap();
 
     info!("booting up");
     error!("[yaml-config] Something went wrong!");

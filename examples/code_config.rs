@@ -1,14 +1,12 @@
 use std::{thread, time::Duration};
 
-use log::LevelFilter;
+use log::{error, info, LevelFilter};
 use log4rs::{
     append::console::ConsoleAppender,
     config::{Appender, Config, Root},
     encode::pattern::PatternEncoder,
 };
 use sentry_log4rs::SentryAppender;
-
-use log::{error, info};
 
 fn main() {
     let stdout = ConsoleAppender::builder().build();
@@ -20,11 +18,11 @@ fn main() {
 
     let config = Config::builder()
         .appender(Appender::builder().build("stdout", Box::new(stdout)))
-        .appender(Appender::builder().build("sentry", Box::new(sentry)))
+        .appender(Appender::builder().build("my_sentry", Box::new(sentry)))
         .build(
             Root::builder()
                 .appender("stdout")
-                .appender("sentry")
+                .appender("my_sentry")
                 .build(LevelFilter::Info),
         )
         .unwrap();
