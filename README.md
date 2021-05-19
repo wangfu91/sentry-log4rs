@@ -13,36 +13,32 @@ appenders:
   stdout:
     kind: console
   
-  sentry:
+  sentry_demo:
     kind: sentry
     encoder:
       pattern: "{m}"
-    dsn: "https://key@sentry.io/42"
+    dsn: "https://key@sentry.io/42" # Your Sentry DSN here
     threshold: error
 
 root:
   level: info
   appenders:
     - stdout
-    - sentry
-
+    - sentry_demo
 ```
 
 main.rs:
 ```rust
 use log::{error, info};
-use log4rs::{self, config::Deserializers};
-use sentry_log4rs::SentryAppenderDeserializer;
+use log4rs;
+use sentry_log4rs::SentryAppender;
 
 fn main() {
-    let mut deserializers = Deserializers::new();
-    deserializers.insert("sentry", SentryAppenderDeserializer);
-    log4rs::init_file("log4rs.yaml", deserializers).unwrap();
+    log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
 
     info!("booting up");
-    error!("Something went wrong!");
-
-    // ...
+    error!("[yaml-config] Something went wrong!");
+	// ...
 }
 ```
 
