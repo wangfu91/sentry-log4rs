@@ -5,8 +5,14 @@
 //! =============
 //!
 //! ```no_run
-//!  log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
-//!  error!("Something went wrong!");
+//! use log::error;
+//! use log4rs;
+//! use sentry_log4rs::SentryAppender;
+//!
+//! fn main() {
+//!     log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
+//!     error!("Something went wrong!");
+//! }
 //! ```
 //!
 //! `log4rs.yaml` file:
@@ -27,24 +33,33 @@
 //! You can also constructing the configuration programmatically without using a config file:
 //!
 //! ```no_run
-//!  let sentry = SentryAppender::builder()
-//!      .dsn("YOUR_SENTRY_DSN_HERE")
-//!      .threshold(LevelFilter::Error)
-//!      .encoder(Box::new(PatternEncoder::new("{m}")))
-//!      .build();
+//! use log::{LevelFilter, error};
+//! use log4rs::{
+//!     config::{Appender, Config, Root},
+//!     encode::pattern::PatternEncoder,
+//! };
+//! use sentry_log4rs::SentryAppender;
 //!
-//!  let config = Config::builder()
-//!      .appender(Appender::builder().build("sentry", Box::new(sentry)))
-//!      .build(
-//!          Root::builder()
-//!              .appender("sentry")
-//!              .build(LevelFilter::Info),
-//!      )
-//!      .unwrap();
+//! fn main() {
+//!     let sentry = SentryAppender::builder()
+//!         .dsn("YOUR_SENTRY_DSN_HERE")
+//!         .threshold(LevelFilter::Error)
+//!         .encoder(Box::new(PatternEncoder::new("{m}")))
+//!         .build();
 //!
-//!  log4rs::init_config(config).unwrap();
+//!     let config = Config::builder()
+//!         .appender(Appender::builder().build("sentry", Box::new(sentry)))
+//!         .build(
+//!             Root::builder()
+//!                 .appender("sentry")
+//!                 .build(LevelFilter::Info),
+//!         )
+//!         .unwrap();
 //!
-//!  error!("Something went wrong!");
+//!     log4rs::init_config(config).unwrap();
+//!
+//!     error!("Something went wrong!");
+//! }
 //! ```
 extern crate log;
 extern crate log4rs;
