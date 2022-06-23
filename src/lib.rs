@@ -65,7 +65,6 @@ extern crate log;
 extern crate log4rs;
 extern crate sentry;
 
-use anyhow;
 use derivative::Derivative;
 use log::{Level, LevelFilter, Record};
 use log4rs::{
@@ -182,7 +181,7 @@ impl SentryAppenderBuilder {
     }
 
     fn dsn_string(mut self, dsn: String) -> SentryAppenderBuilder {
-        self.dsn = dsn.to_string();
+        self.dsn = dsn;
         self
     }
 
@@ -198,7 +197,7 @@ impl SentryAppenderBuilder {
             encoder: self
                 .encoder
                 .unwrap_or_else(|| Box::new(PatternEncoder::new("{m}"))),
-            threshold: self.threshold.unwrap_or_else(|| LevelFilter::Error),
+            threshold: self.threshold.unwrap_or(LevelFilter::Error),
         }
     }
 }
