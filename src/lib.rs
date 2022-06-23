@@ -5,14 +5,8 @@
 //! =============
 //!
 //! ```no_run
-//! use log::error;
-//! use log4rs;
-//! use sentry_log4rs::SentryAppender;
-//!
-//! fn main() {
-//!     log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
-//!     error!("Something went wrong!");
-//! }
+//!  log4rs::init_file("log4rs.yaml", SentryAppender::deserializers()).unwrap();
+//!  error!("Something went wrong!");
 //! ```
 //!
 //! `log4rs.yaml` file:
@@ -33,39 +27,29 @@
 //! You can also constructing the configuration programmatically without using a config file:
 //!
 //! ```no_run
-//! use log::{LevelFilter, error};
-//! use log4rs::{
-//!     config::{Appender, Config, Root},
-//!     encode::pattern::PatternEncoder,
-//! };
-//! use sentry_log4rs::SentryAppender;
+//!  let sentry = SentryAppender::builder()
+//!      .dsn("YOUR_SENTRY_DSN_HERE")
+//!      .threshold(LevelFilter::Error)
+//!      .encoder(Box::new(PatternEncoder::new("{m}")))
+//!      .build();
 //!
-//! fn main() {
-//!     let sentry = SentryAppender::builder()
-//!         .dsn("YOUR_SENTRY_DSN_HERE")
-//!         .threshold(LevelFilter::Error)
-//!         .encoder(Box::new(PatternEncoder::new("{m}")))
-//!         .build();
+//!  let config = Config::builder()
+//!      .appender(Appender::builder().build("sentry", Box::new(sentry)))
+//!      .build(
+//!          Root::builder()
+//!              .appender("sentry")
+//!              .build(LevelFilter::Info),
+//!      )
+//!      .unwrap();
 //!
-//!     let config = Config::builder()
-//!         .appender(Appender::builder().build("sentry", Box::new(sentry)))
-//!         .build(
-//!             Root::builder()
-//!                 .appender("sentry")
-//!                 .build(LevelFilter::Info),
-//!         )
-//!         .unwrap();
+//!  log4rs::init_config(config).unwrap();
 //!
-//!     log4rs::init_config(config).unwrap();
-//!
-//!     error!("Something went wrong!");
-//! }
+//!  error!("Something went wrong!");
 //! ```
 extern crate log;
 extern crate log4rs;
 extern crate sentry;
 
-use anyhow;
 use derivative::Derivative;
 use log::{Level, LevelFilter, Record};
 use log4rs::{
@@ -182,7 +166,7 @@ impl SentryAppenderBuilder {
     }
 
     fn dsn_string(mut self, dsn: String) -> SentryAppenderBuilder {
-        self.dsn = dsn.to_string();
+        self.dsn = dsn;
         self
     }
 
@@ -198,7 +182,7 @@ impl SentryAppenderBuilder {
             encoder: self
                 .encoder
                 .unwrap_or_else(|| Box::new(PatternEncoder::new("{m}"))),
-            threshold: self.threshold.unwrap_or_else(|| LevelFilter::Error),
+            threshold: self.threshold.unwrap_or(LevelFilter::Error),
         }
     }
 }
