@@ -73,9 +73,8 @@ use log4rs::{
     encode::{pattern::PatternEncoder, writer::simple::SimpleWriter, Encode, EncoderConfig},
 };
 use sentry::{
-    internals::ClientInitGuard,
     protocol::value::{Number, Value},
-    Level as SentryLevel,
+    ClientInitGuard, Level as SentryLevel,
 };
 
 /// Configuration for the sentry appender.
